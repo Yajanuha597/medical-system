@@ -1,5 +1,6 @@
 const API_URL = "https://backmedicalsystem.byronrm.com";
 
+
 async function postData(endpoint, data) {
 
     const respuesta = await fetch(API_URL + endpoint, {

@@ -25,7 +25,6 @@ usuario_bp = Blueprint(
 # ===============================
 
 @usuario_bp.route("/registro", methods=["POST"])
-@role_required("admin")
 def registro():
     data = request.json
 

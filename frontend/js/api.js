@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000";
+const API_URL = "https://backmedicalsystem.byronrm.com";
 
 async function postData(endpoint, data) {
 

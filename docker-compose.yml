@@ -1,164 +1,174 @@
 services:
 
-  postgres:
+  traefik:
+    image: traefik:v3.6.23
+    container_name: traefik
+    restart: unless-stopped
 
-    image: postgres:16
+    command:
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=medical-network"
 
-    container_name: medical-postgres
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
 
-    restart: always
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
 
-    environment:
+      - "--certificatesresolvers.letsencrypt.acme.email=jbt.cunalata@gmail.com"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
 
-      POSTGRES_USER: postgres
-
-      POSTGRES_PASSWORD: postgres
-
-      POSTGRES_DB: medical_system
-
+      - "--log.level=INFO"
 
     ports:
-
-      - "5433:5432"
-
+      - "80:80"
+      - "443:443"
 
     volumes:
-
-      - postgres_data:/var/lib/postgresql/data
-
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/acme.json:/letsencrypt/acme.json
 
     networks:
-
       - medical-network
 
 
+  postgres:
+    image: postgres:16
+    container_name: medical-postgres
+    restart: unless-stopped
 
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: medical_system
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d medical_system"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+    networks:
+      - medical-network
 
 
   backend:
-
-
     build:
-
       context: ./backend
 
-
     container_name: medical-backend
-
-
-    restart: always
-
+    restart: unless-stopped
 
     depends_on:
-
-      - postgres
-
+      postgres:
+        condition: service_healthy
 
     environment:
-
       DB_USER: postgres
-
       DB_PASSWORD: postgres
-
       DB_HOST: postgres
-
       DB_PORT: 5432
-
       DB_NAME: medical_system
 
-
-    ports:
-
-      - "5000:5000"
-
-
     networks:
-
       - medical-network
 
-
-
-
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=medical-network"
+      - "traefik.http.routers.backend.rule=Host(`backmedicalsystem.byronrm.com`)"
+      - "traefik.http.routers.backend.entrypoints=websecure"
+      - "traefik.http.routers.backend.tls=true"
+      - "traefik.http.routers.backend.tls.certresolver=letsencrypt"
+      - "traefik.http.services.backend.loadbalancer.server.port=5000"
 
 
   frontend:
-
-
     build:
-
       context: ./frontend
 
-
     container_name: medical-frontend
-
-
-    restart: always
-
+    restart: unless-stopped
 
     depends_on:
-
       - backend
 
-
-    ports:
-
-      - "8080:80"
-
-
     networks:
-
       - medical-network
 
-
-
-
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=medical-network"
+      - "traefik.http.routers.frontend.rule=Host(`medicalsystem.byronrm.com`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls=true"
+      - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
 
 
   pgadmin:
-
-
     image: dpage/pgadmin4
-
-
     container_name: medical-pgadmin
-
-
-    restart: always
-
+    restart: unless-stopped
 
     environment:
-
       PGADMIN_DEFAULT_EMAIL: admin@medical.com
-
       PGADMIN_DEFAULT_PASSWORD: admin
 
-
-    ports:
-
-      - "5050:80"
-
-
     depends_on:
-
-      - postgres
-
+      postgres:
+        condition: service_healthy
 
     networks:
-
       - medical-network
 
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=medical-network"
+      - "traefik.http.routers.pgadmin.rule=Host(`pgmedicalsystem.byronrm.com`)"
+      - "traefik.http.routers.pgadmin.entrypoints=websecure"
+      - "traefik.http.routers.pgadmin.tls=true"
+      - "traefik.http.routers.pgadmin.tls.certresolver=letsencrypt"
+      - "traefik.http.services.pgadmin.loadbalancer.server.port=80"
 
 
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: unless-stopped
 
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
+    networks:
+      - medical-network
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=medical-network"
+      - "traefik.http.routers.portainer.rule=Host(`portainermedicalsystem.byronrm.com`)"
+      - "traefik.http.routers.portainer.entrypoints=websecure"
+      - "traefik.http.routers.portainer.tls=true"
+      - "traefik.http.routers.portainer.tls.certresolver=letsencrypt"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
 
 
 volumes:
-
   postgres_data:
-
-
+  portainer_data:
 
 
 networks:
-
   medical-network:
+    name: medical-network
+    driver: bridge
+

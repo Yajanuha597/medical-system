@@ -9,7 +9,7 @@ from app.models.usuario import Usuario
 from app import bcrypt
 
 from app.middleware.auth_middleware import token_required
-
+from app.middleware.role_middleware import role_required
 
 
 usuario_bp = Blueprint(
@@ -25,8 +25,8 @@ usuario_bp = Blueprint(
 # ===============================
 
 @usuario_bp.route("/registro", methods=["POST"])
+@role_required("admin")
 def registro():
-
     data = request.json
 
 

@@ -4,6 +4,7 @@ from app.config.db import db
 from app.models.paciente import Paciente
 
 from app.middleware.auth_middleware import token_required
+from app.middleware.role_middleware import role_required
 
 
 paciente_bp = Blueprint(
@@ -19,8 +20,8 @@ paciente_bp = Blueprint(
 
 @paciente_bp.route("", methods=["POST"])
 @token_required
+@role_required("admin")
 def crear_paciente():
-
     data = request.json
 
 
@@ -74,8 +75,8 @@ def crear_paciente():
 
 @paciente_bp.route("", methods=["GET"])
 @token_required
+@role_required("admin")
 def listar_pacientes():
-
 
     pacientes = Paciente.query.all()
 
@@ -112,8 +113,8 @@ def listar_pacientes():
 
 @paciente_bp.route("/<int:id>", methods=["GET"])
 @token_required
+@role_required("admin")
 def obtener_paciente(id):
-
 
     paciente = Paciente.query.get(id)
 
@@ -152,8 +153,8 @@ def obtener_paciente(id):
 
 @paciente_bp.route("/<int:id>", methods=["PUT"])
 @token_required
+@role_required("admin")
 def actualizar_paciente(id):
-
 
     paciente = Paciente.query.get(id)
 
@@ -209,8 +210,8 @@ def actualizar_paciente(id):
 
 @paciente_bp.route("/<int:id>", methods=["DELETE"])
 @token_required
+@role_required("admin")
 def eliminar_paciente(id):
-
 
     paciente = Paciente.query.get(id)
 

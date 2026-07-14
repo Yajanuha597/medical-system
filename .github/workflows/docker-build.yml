@@ -1,0 +1,46 @@
+name: Medical System CI/CD
+
+
+on:
+
+  push:
+
+    branches:
+
+      - main
+
+
+
+jobs:
+
+
+  build:
+
+
+    runs-on: ubuntu-latest
+
+
+    steps:
+
+
+      - name: Descargar codigo
+
+        uses: actions/checkout@v4
+
+
+
+      - name: Configurar Docker
+
+        uses: docker/setup-buildx-action@v3
+
+
+
+      - name: Construir Backend
+
+        run: docker build ./backend -t medical-backend
+
+
+
+      - name: Construir Frontend
+
+        run: docker build ./frontend -t medical-frontend

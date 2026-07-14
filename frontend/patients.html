@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pacientes - Medical System</title>
+
+<link rel="stylesheet" href="css/dashboard.css">
+
+</head>
+
+
+<body>
+
+
+<header>
+
+<h1>🏥 Medical System</h1>
+
+<button onclick="cerrarSesion()">
+Cerrar sesión
+</button>
+
+</header>
+
+
+
+<nav>
+
+<a href="dashboard.html">Inicio</a>
+
+<a href="patients.html">Pacientes</a>
+
+<a href="doctors.html">Doctores</a>
+
+<a href="appointments.html">Citas</a>
+
+</nav>
+
+
+
+<main>
+
+
+<h2>
+👥 Gestión de Pacientes
+</h2>
+
+
+<button onclick="mostrarFormulario()">
+➕ Nuevo Paciente
+</button>
+
+
+
+<div id="formulario" style="display:none">
+
+
+<h3>Registrar Paciente</h3>
+
+
+<input id="idPaciente" type="hidden">
+
+
+
+<input id="nombre" placeholder="Nombre">
+
+
+<input id="cedula" placeholder="Cédula">
+
+
+<input id="edad" type="number" placeholder="Edad">
+
+
+<input id="telefono" placeholder="Teléfono">
+
+
+<input id="direccion" placeholder="Dirección">
+
+
+<button onclick="guardarPaciente()">
+Guardar
+</button>
+
+
+<button onclick="cancelar()">
+Cancelar
+</button>
+
+
+</div>
+
+
+
+
+
+<table>
+
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+<th>Nombre</th>
+<th>Cédula</th>
+<th>Edad</th>
+<th>Teléfono</th>
+<th>Acciones</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="tablaPacientes">
+
+
+</tbody>
+
+
+</table>
+
+
+</main>
+
+
+
+<script src="js/patients.js"></script>
+
+
+</body>
+
+</html>

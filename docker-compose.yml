@@ -1,0 +1,164 @@
+services:
+
+  postgres:
+
+    image: postgres:16
+
+    container_name: medical-postgres
+
+    restart: always
+
+    environment:
+
+      POSTGRES_USER: postgres
+
+      POSTGRES_PASSWORD: postgres
+
+      POSTGRES_DB: medical_system
+
+
+    ports:
+
+      - "5433:5432"
+
+
+    volumes:
+
+      - postgres_data:/var/lib/postgresql/data
+
+
+    networks:
+
+      - medical-network
+
+
+
+
+
+  backend:
+
+
+    build:
+
+      context: ./backend
+
+
+    container_name: medical-backend
+
+
+    restart: always
+
+
+    depends_on:
+
+      - postgres
+
+
+    environment:
+
+      DB_USER: postgres
+
+      DB_PASSWORD: postgres
+
+      DB_HOST: postgres
+
+      DB_PORT: 5432
+
+      DB_NAME: medical_system
+
+
+    ports:
+
+      - "5000:5000"
+
+
+    networks:
+
+      - medical-network
+
+
+
+
+
+
+  frontend:
+
+
+    build:
+
+      context: ./frontend
+
+
+    container_name: medical-frontend
+
+
+    restart: always
+
+
+    depends_on:
+
+      - backend
+
+
+    ports:
+
+      - "8080:80"
+
+
+    networks:
+
+      - medical-network
+
+
+
+
+
+
+  pgadmin:
+
+
+    image: dpage/pgadmin4
+
+
+    container_name: medical-pgadmin
+
+
+    restart: always
+
+
+    environment:
+
+      PGADMIN_DEFAULT_EMAIL: admin@medical.com
+
+      PGADMIN_DEFAULT_PASSWORD: admin
+
+
+    ports:
+
+      - "5050:80"
+
+
+    depends_on:
+
+      - postgres
+
+
+    networks:
+
+      - medical-network
+
+
+
+
+
+
+volumes:
+
+  postgres_data:
+
+
+
+
+networks:
+
+  medical-network:

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Citas - Medical System</title>
+
+<link rel="stylesheet" href="css/dashboard.css">
+
+</head>
+
+
+<body>
+
+
+<header>
+
+<h1>🏥 Medical System</h1>
+
+<button onclick="cerrarSesion()">
+Cerrar sesión
+</button>
+
+</header>
+
+
+
+<nav>
+
+<a href="dashboard.html">Inicio</a>
+
+<a href="patients.html">Pacientes</a>
+
+<a href="doctors.html">Doctores</a>
+
+<a href="appointments.html">Citas</a>
+
+</nav>
+
+
+
+<main>
+
+
+<h2>
+📅 Gestión de Citas
+</h2>
+
+
+
+<button onclick="mostrarFormulario()">
+➕ Nueva Cita
+</button>
+
+
+
+
+<div id="formulario" style="display:none;">
+
+
+<h3>Registrar Cita</h3>
+
+
+<input type="hidden" id="idCita">
+
+
+
+<label>
+Paciente
+</label>
+
+
+<select id="paciente_id">
+
+<option value="">
+Seleccione paciente
+</option>
+
+</select>
+
+
+
+
+<label>
+Doctor
+</label>
+
+
+<select id="doctor_id">
+
+<option value="">
+Seleccione doctor
+</option>
+
+</select>
+
+
+
+
+<label>
+Fecha
+</label>
+
+
+<input 
+type="date"
+id="fecha"
+>
+
+
+
+
+<label>
+Hora
+</label>
+
+
+<input
+type="time"
+id="hora"
+>
+
+
+
+
+<label>
+Motivo
+</label>
+
+
+<input
+type="text"
+id="motivo"
+placeholder="Motivo de consulta"
+>
+
+
+
+
+<label>
+Estado
+</label>
+
+
+<select id="estado">
+
+
+<option value="Pendiente">
+Pendiente
+</option>
+
+
+<option value="Atendida">
+Atendida
+</option>
+
+
+<option value="Cancelada">
+Cancelada
+</option>
+
+
+</select>
+
+
+
+
+
+<button onclick="guardarCita()">
+Guardar
+</button>
+
+
+<button onclick="cancelar()">
+Cancelar
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+<table>
+
+
+<thead>
+
+
+<tr>
+
+<th>ID</th>
+
+<th>Paciente</th>
+
+<th>Doctor</th>
+
+<th>Fecha</th>
+
+<th>Hora</th>
+
+<th>Motivo</th>
+
+<th>Estado</th>
+
+<th>Acciones</th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+
+<tbody id="tablaCitas">
+
+
+</tbody>
+
+
+</table>
+
+
+
+
+</main>
+
+
+
+<script src="js/appointments.js"></script>
+
+
+</body>
+
+</html>

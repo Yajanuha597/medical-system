@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Doctores - Medical System</title>
+
+<link rel="stylesheet" href="css/dashboard.css">
+
+</head>
+
+
+<body>
+
+
+<header>
+
+<h1>🏥 Medical System</h1>
+
+<button onclick="cerrarSesion()">
+Cerrar sesión
+</button>
+
+</header>
+
+
+
+<nav>
+
+<a href="dashboard.html">Inicio</a>
+
+<a href="patients.html">Pacientes</a>
+
+<a href="doctors.html">Doctores</a>
+
+<a href="appointments.html">Citas</a>
+
+</nav>
+
+
+
+<main>
+
+
+<h2>
+👨‍⚕️ Gestión de Doctores
+</h2>
+
+
+
+<button onclick="mostrarFormulario()">
+➕ Nuevo Doctor
+</button>
+
+
+
+<div id="formulario" style="display:none">
+
+
+<h3>Registrar Doctor</h3>
+
+
+<input id="idDoctor" type="hidden">
+
+
+<input id="nombre" placeholder="Nombre">
+
+
+<input id="especialidad" placeholder="Especialidad">
+
+
+<input id="correo" placeholder="Correo">
+
+
+<input id="telefono" placeholder="Teléfono">
+
+
+<input id="horario" placeholder="Horario">
+
+
+<input id="estado" placeholder="Estado">
+
+
+<button onclick="guardarDoctor()">
+Guardar
+</button>
+
+
+<button onclick="cancelar()">
+Cancelar
+</button>
+
+
+</div>
+
+
+
+
+<table>
+
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+<th>Nombre</th>
+<th>Especialidad</th>
+<th>Correo</th>
+<th>Horario</th>
+<th>Estado</th>
+<th>Acciones</th>
+
+</tr>
+
+
+</thead>
+
+
+
+<tbody id="tablaDoctores">
+
+
+</tbody>
+
+
+
+</table>
+
+
+
+</main>
+
+
+
+
+<script src="js/doctors.js"></script>
+
+
+</body>
+
+</html>

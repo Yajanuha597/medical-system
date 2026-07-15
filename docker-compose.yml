@@ -2,8 +2,6 @@ services:
 
   traefik:
     image: traefik:v3.6.23
-    container_name: traefik
-    restart: unless-stopped
 
     command:
       - "--api.dashboard=true"
@@ -39,8 +37,6 @@ services:
 
   postgres:
     image: postgres:16
-    container_name: medical-postgres
-    restart: unless-stopped
 
     environment:
       POSTGRES_USER: postgres
@@ -61,15 +57,8 @@ services:
 
 
   backend:
-    build:
-      context: ./backend
+    image: medical-system-backend
 
-    container_name: medical-backend
-    restart: unless-stopped
-
-    depends_on:
-      postgres:
-        condition: service_healthy
 
     environment:
       DB_USER: postgres
@@ -92,12 +81,7 @@ services:
 
 
   frontend:
-    build:
-      context: ./frontend
-
-    container_name: medical-frontend
-    restart: unless-stopped
-
+    image: medical-system-frontend
     depends_on:
       - backend
 
@@ -116,16 +100,13 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4
-    container_name: medical-pgadmin
-    restart: unless-stopped
 
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@medical.com
       PGADMIN_DEFAULT_PASSWORD: admin
 
     depends_on:
-      postgres:
-        condition: service_healthy
+      - postgres
 
     networks:
       - medical-network
@@ -142,8 +123,6 @@ services:
 
   portainer:
     image: portainer/portainer-ce:latest
-    container_name: portainer
-    restart: unless-stopped
 
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -170,5 +149,4 @@ volumes:
 networks:
   medical-network:
     name: medical-network
-    driver: bridge
-
+    external: true

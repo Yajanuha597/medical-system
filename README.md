@@ -128,4 +128,11 @@ El flujo realiza:
 Levantar servicios:
 
 ```bash
-docker compose up -d
+## Despliegue en VPS
+
+El proyecto fue desplegado utilizando Docker Swarm.
+
+Crear los servicios:
+
+```bash
+docker stack deploy -c docker-compose.yml medical-system
